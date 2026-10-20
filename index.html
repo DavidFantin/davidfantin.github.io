@@ -33,11 +33,16 @@
       <li><a href="resume.pdf">Resume (PDF)</a></li>
     </ul>
   </div>
+  <img class="portrait" src="profile-pic.png" alt="Portrait of David Fantin">
+  <!-- OPTIONAL ANIMATION: to use it instead of the photo, delete the img above,
+       uncomment this figure, the script at the bottom of this file, and the
+       ".viz" and ".ctrl" rules in style.css.
   <figure class="viz">
     <canvas id="flow" role="img" aria-label="Animated phase portrait of a damped pendulum: particles spiral toward stable equilibria and away from saddle points"></canvas>
     <label class="ctrl" for="damp">Damping <input id="damp" type="range" min="0.05" max="0.8" step="0.01" value="0.25"> <output id="dampOut" for="damp">0.25</output></label>
     <figcaption>Particles flowing through the phase portrait of a damped pendulum, integrated with a fourth-order Runge–Kutta method. Drag the slider to change the damping.</figcaption>
   </figure>
+  -->
 </section>
 
 <section id="about">
@@ -78,6 +83,7 @@
   <p>© 2026 David Fantin</p>
 </footer>
 </div>
+<!-- OPTIONAL ANIMATION SCRIPT (see the note in the hero section). Uncomment to use.
 <script>
 (function () {
   var cv = document.getElementById('flow');
@@ -212,5 +218,6 @@
   if (!reduce) requestAnimationFrame(frame);
 })();
 </script>
+-->
 </body>
 </html>

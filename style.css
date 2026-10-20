@@ -35,16 +35,22 @@ p { margin: 0 0 1rem; max-width: 38rem; }
 .links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin: 1.5rem 0 0; padding: 0; list-style: none; font-family: var(--sans); font-weight: 500; font-size: 1rem; }
 
 /* Home hero */
-.hero { display: grid; grid-template-columns: 1.05fr 1fr; gap: 2.5rem; align-items: center; padding: 3rem 0 2rem; }
+.hero { display: grid; grid-template-columns: 1fr 17rem; gap: 2.5rem; align-items: center; padding: 3rem 0 2rem; }
 figure { margin: 1.5rem 0; }
 figcaption { font-family: var(--sans); font-size: 0.85rem; color: var(--muted); line-height: 1.5; margin-top: 0.5rem; max-width: 38rem; }
 @keyframes draw { to { stroke-dashoffset: 0; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
+
+.portrait { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border: 1px solid var(--rule); border-radius: 2px; }
+
+/* OPTIONAL ANIMATION STYLES: uncomment these if you switch from the photo to the animation.
+   Also change the .hero columns above to "1.05fr 1fr" so the canvas has room.
 .viz canvas { display: block; width: 100%; aspect-ratio: 4 / 3; }
 .ctrl { display: flex; align-items: center; gap: 0.75rem; margin-top: 0.5rem; font-family: var(--sans); font-size: 0.9rem; color: var(--muted); }
 .ctrl input { flex: 1; accent-color: var(--accent); }
 .ctrl output { min-width: 2.5rem; text-align: right; font-variant-numeric: tabular-nums; }
+*/
 
 /* Lists of work */
 .list { list-style: none; margin: 1rem 0 0; padding: 0; border-top: 1px solid var(--rule); }
@@ -66,5 +72,6 @@ footer p { margin: 0 0 0.5rem; }
 
 @media (max-width: 760px) {
   .hero { grid-template-columns: 1fr; padding-top: 1.5rem; }
+  .portrait { max-width: 14rem; }
   .meta div { grid-template-columns: 1fr; }
 }
