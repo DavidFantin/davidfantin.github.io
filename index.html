@@ -33,28 +33,16 @@
       <li><a href="resume.pdf">Resume (PDF)</a></li>
     </ul>
   </div>
-  <figure>
-    <svg viewBox="0 0 520 300" role="img" aria-labelledby="plot-title">
-      <title id="plot-title">Sketch of an electron velocity distribution with a narrow core and a wider halo</title>
-      <line class="axis" x1="50" y1="256" x2="500" y2="256"/>
-      <line class="axis" x1="50" y1="24" x2="50" y2="256"/>
-      <line class="tick" x1="275" y1="256" x2="275" y2="263"/>
-      <path class="ref" d="M105 244 C165 242 215 90 275 48 C335 90 385 242 445 244"/>
-      <path class="curve" pathLength="1" d="M60 236 C95 226 120 214 150 190 C185 160 215 70 275 48 C335 70 365 160 400 190 C430 214 455 226 490 236"/>
-      <line class="curve static" x1="340" y1="40" x2="366" y2="40"/>
-      <text class="lbl" x="374" y="44">core and halo</text>
-      <line class="ref" x1="340" y1="62" x2="366" y2="62"/>
-      <text class="lbl" x="374" y="66">core only</text>
-      <text class="lbl" x="275" y="286" text-anchor="middle">electron velocity</text>
-      <text class="lbl" transform="translate(18 140) rotate(-90)" text-anchor="middle">phase-space density (log scale)</text>
-    </svg>
-    <figcaption>A sketch of the solar wind electron distributions I studied: a dense thermal core with a suprathermal halo.</figcaption>
+  <figure class="viz">
+    <canvas id="flow" role="img" aria-label="Animated phase portrait of a damped pendulum: particles spiral toward stable equilibria and away from saddle points"></canvas>
+    <label class="ctrl" for="damp">Damping <input id="damp" type="range" min="0.05" max="0.8" step="0.01" value="0.25"> <output id="dampOut" for="damp">0.25</output></label>
+    <figcaption>Particles flowing through the phase portrait of a damped pendulum, integrated with a fourth-order Runge–Kutta method. Drag the slider to change the damping.</figcaption>
   </figure>
 </section>
 
 <section id="about">
   <h2>About</h2>
-  <p>My background is in physics, mathematics, and computer science. I finished an M.S. in Applied Mathematics at UT Dallas in May 2026, where I focused on numerical linear algebra and image analysis. My research so far has ranged from electrons in the solar wind to blood vessels in retinal images.</p>
+  <p>My background is in physics, mathematics, and computer science. I finished an M.S. in Applied Mathematics at UT Dallas in May 2026, where I focused on numerical linear algebra and image analysis. My research so far has ranged from space physics data to medical image analysis.</p>
   <div class="todo"><strong>Write this:</strong> two or three sentences on what you want to work on next, and why. This is the part a resume cannot say.</div>
 </section>
 
@@ -90,5 +78,139 @@
   <p>© 2026 David Fantin</p>
 </footer>
 </div>
+<script>
+(function () {
+  var cv = document.getElementById('flow');
+  if (!cv) return;
+  var ctx = cv.getContext('2d');
+  var slider = document.getElementById('damp');
+  var out = document.getElementById('dampOut');
+  var XR = 4.2, YR = 3.15, TRAIL = 26, N = 240;
+  var c = parseFloat(slider.value), W = 0, H = 0, colors = {}, ps = [];
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function readColors() {
+    var s = getComputedStyle(document.documentElement);
+    colors = {
+      accent: s.getPropertyValue('--accent').trim(),
+      muted: s.getPropertyValue('--muted').trim(),
+      ink: s.getPropertyValue('--ink').trim(),
+      sans: s.getPropertyValue('--sans').trim()
+    };
+  }
+  function sx(x) { return (x + XR) / (2 * XR) * W; }
+  function sy(y) { return (YR - y) / (2 * YR) * H; }
+
+  // One fourth-order Runge-Kutta step for x' = y, y' = -sin(x) - c*y
+  function step(p, h) {
+    var x = p.x, y = p.y;
+    var k1x = y, k1y = -Math.sin(x) - c * y;
+    var k2x = y + h / 2 * k1y, k2y = -Math.sin(x + h / 2 * k1x) - c * (y + h / 2 * k1y);
+    var k3x = y + h / 2 * k2y, k3y = -Math.sin(x + h / 2 * k2x) - c * (y + h / 2 * k2y);
+    var k4x = y + h * k3y, k4y = -Math.sin(x + h * k3x) - c * (y + h * k3y);
+    p.x = x + h / 6 * (k1x + 2 * k2x + 2 * k3x + k4x);
+    p.y = y + h / 6 * (k1y + 2 * k2y + 2 * k3y + k4y);
+  }
+  function spawn(p) {
+    p.x = (Math.random() * 2 - 1) * XR;
+    p.y = (Math.random() * 2 - 1) * YR;
+    p.age = 0;
+    p.max = 150 + Math.random() * 150;
+    p.trail = [];
+    return p;
+  }
+  function drawAxes() {
+    ctx.globalAlpha = 0.45;
+    ctx.strokeStyle = colors.muted;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, sy(0)); ctx.lineTo(W, sy(0));
+    ctx.moveTo(sx(0), 0); ctx.lineTo(sx(0), H);
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = colors.muted;
+    ctx.font = 'italic 15px ' + colors.sans;
+    ctx.fillText('\u03B8', W - 18, sy(0) - 8);
+    ctx.fillText('\u03C9', sx(0) + 8, 16);
+    // equilibria: stable at theta = 0, saddles at theta = +/- pi
+    ctx.fillStyle = colors.accent;
+    ctx.beginPath(); ctx.arc(sx(0), sy(0), 4, 0, 6.2832); ctx.fill();
+    ctx.strokeStyle = colors.ink;
+    ctx.lineWidth = 1.5;
+    [-Math.PI, Math.PI].forEach(function (x) {
+      ctx.beginPath(); ctx.arc(sx(x), sy(0), 4, 0, 6.2832); ctx.stroke();
+    });
+  }
+  function strokeTrail(t, alpha) {
+    if (t.length < 2) return;
+    ctx.globalAlpha = alpha;
+    ctx.beginPath();
+    ctx.moveTo(t[0][0], t[0][1]);
+    for (var i = 1; i < t.length; i++) ctx.lineTo(t[i][0], t[i][1]);
+    ctx.stroke();
+  }
+  function frame() {
+    ctx.clearRect(0, 0, W, H);
+    drawAxes();
+    ctx.strokeStyle = colors.accent;
+    ctx.lineWidth = 1.5;
+    ctx.lineCap = 'round';
+    for (var i = 0; i < ps.length; i++) {
+      var p = ps[i];
+      step(p, 0.03); step(p, 0.03);
+      p.age++;
+      if (p.age > p.max || Math.abs(p.x) > XR || Math.abs(p.y) > YR) { spawn(p); continue; }
+      p.trail.push([sx(p.x), sy(p.y)]);
+      if (p.trail.length > TRAIL) p.trail.shift();
+      var fade = Math.min(1, p.age / 15, (p.max - p.age) / 15);
+      strokeTrail(p.trail, 0.7 * fade);
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(frame);
+  }
+  function drawStatic() {
+    ctx.clearRect(0, 0, W, H);
+    drawAxes();
+    ctx.strokeStyle = colors.accent;
+    ctx.lineWidth = 1.5;
+    for (var i = 0; i < 9; i++) {
+      for (var j = 0; j < 5; j++) {
+        var p = { x: -XR + (i + 0.5) * (2 * XR / 9), y: -YR + (j + 0.5) * (2 * YR / 5) };
+        var t = [[sx(p.x), sy(p.y)]];
+        for (var k = 0; k < 220; k++) {
+          step(p, 0.04);
+          if (Math.abs(p.x) > XR || Math.abs(p.y) > YR) break;
+          t.push([sx(p.x), sy(p.y)]);
+        }
+        strokeTrail(t, 0.5);
+      }
+    }
+    ctx.globalAlpha = 1;
+  }
+  function resize() {
+    var r = cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+    W = r.width; H = r.height;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (reduce) drawStatic();
+  }
+
+  slider.addEventListener('input', function () {
+    c = parseFloat(slider.value);
+    out.textContent = c.toFixed(2);
+    if (reduce) drawStatic();
+  });
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+    readColors();
+    if (reduce) drawStatic();
+  });
+
+  readColors();
+  for (var i = 0; i < N; i++) { var p = spawn({}); p.age = Math.random() * p.max; ps.push(p); }
+  if ('ResizeObserver' in window) new ResizeObserver(resize).observe(cv); else { resize(); window.addEventListener('resize', resize); }
+  resize();
+  if (!reduce) requestAnimationFrame(frame);
+})();
+</script>
 </body>
 </html>
