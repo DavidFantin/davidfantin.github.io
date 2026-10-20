@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Finding blood vessels in retinal images | David Fantin</title>
+<meta name="description" content="A comparison of feed-forward and U-Net neural networks against a classical method for retinal vessel segmentation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="wrap">
+<header class="site-nav">
+  <a class="name" href="../index.html">David Fantin</a>
+  <nav aria-label="Main"><ul>
+    <li><a href="../index.html#research" aria-current="page">Research</a></li>
+    <li><a href="../notes/index.html">Notes</a></li>
+    <li><a href="../resume.pdf">Resume</a></li>
+  </ul></nav>
+</header>
+
+<main>
+<h1>Finding blood vessels in retinal images</h1>
+<p class="lead">I trained two kinds of neural networks to find blood vessels in retinal images and compared them with a classical image-processing method.</p>
+<dl class="meta"><div><dt>When</dt><dd>Fall 2025</dd></div><div><dt>Tools</dt><dd>MATLAB</dd></div><div><dt>Methods</dt><dd>Feed-forward network, U-Net, cross-validation</dd></div><div><dt>Code</dt><dd><a href="https://github.com/DavidFantin">GitHub</a> (link the specific repository here)</dd></div></dl>
+
+<h2>The question</h2>
+<div class="todo"><strong>Write this:</strong> why vessel segmentation matters, and what “classical versus neural network” means for a reader who has not seen either.</div>
+<h2>The data</h2>
+<div class="todo"><strong>Write this:</strong> which dataset you used, how many images, and how the vessels were labeled.</div><figure><div class="todo fig"><strong>Write this:</strong> A retinal image next to its hand-labeled vessel mask.</div><figcaption>Write a caption that tells the reader what to notice in the figure.</figcaption></figure>
+<h2>What I did</h2>
+<p>I designed and trained a feed-forward network and a U-Net in MATLAB. I built a cross-validation pipeline to evaluate both against a classical image-processing baseline.</p><div class="todo"><strong>Write this:</strong> the architecture choices, the classical method you compared against, and the metric you used.</div>
+<h2>What I found</h2>
+<p>The models outperformed the classical baseline.</p><div class="todo"><strong>Write this:</strong> the actual numbers: which metric, by how much, and whether the U-Net or the feed-forward network did better.</div><figure><div class="todo fig"><strong>Write this:</strong> Predicted vessels from each method on the same image.</div><figcaption>Write a caption that tells the reader what to notice in the figure.</figcaption></figure>
+<h2>What surprised me</h2>
+<div class="todo"><strong>Write this:</strong> one thing that did not go as expected, such as where the networks failed.</div>
+<h2>What’s next</h2>
+<div class="todo"><strong>Write this:</strong> what you would try with more time.</div>
+<p style="margin-top:3rem"><a href="../index.html#research">Back to all research</a></p>
+</main>
+<footer>
+  <p>Based in New York, NY. The best way to reach me is <a href="mailto:davidfantin.2000@gmail.com">by email</a>.</p>
+  <p>© 2026 David Fantin</p>
+</footer>
+</div>
+</body>
+</html>

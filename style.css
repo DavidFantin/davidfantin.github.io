@@ -1,0 +1,71 @@
+:root {
+  --paper: #f1f5f9; --ink: #0f1b33; --muted: #52607a; --accent: #1d4ed8;
+  --rule: #cdd6e4; --grid: rgba(29, 78, 216, 0.07);
+  --serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --sans: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --paper: #0e1626; --ink: #e6ecf7; --muted: #9aa8c2; --accent: #7fa6ff; --rule: #26324a; --grid: rgba(127, 166, 255, 0.08); }
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background-color: var(--paper);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 32px 32px; color: var(--ink);
+  font-family: var(--serif); font-size: 1.125rem; line-height: 1.65;
+}
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+.wrap { max-width: 56rem; margin: 0 auto; padding: 0 1.5rem; }
+
+/* Navigation */
+.site-nav { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem 1.5rem; padding: 1.5rem 0; font-family: var(--sans); font-weight: 500; font-size: 1rem; }
+.site-nav .name { font-family: var(--serif); font-size: 1.3rem; color: var(--ink); text-decoration: none; }
+.site-nav ul { display: flex; gap: 1.5rem; list-style: none; margin: 0; padding: 0; }
+.site-nav a[aria-current="page"] { color: var(--ink); text-decoration-thickness: 2px; }
+
+/* Typography */
+h1 { margin: 0 0 1rem; font-weight: 500; font-size: clamp(2.4rem, 7vw, 4.25rem); line-height: 1.05; letter-spacing: -0.025em; }
+h2 { margin: 3rem 0 0.5rem; font-weight: 500; font-size: 1.6rem; letter-spacing: -0.01em; }
+h3 { margin: 0; font-weight: 500; font-size: 1.35rem; line-height: 1.35; }
+p { margin: 0 0 1rem; max-width: 38rem; }
+.lead { font-size: 1.35rem; line-height: 1.5; max-width: 34rem; }
+.small { font-family: var(--sans); font-size: 0.9rem; color: var(--muted); }
+.links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin: 1.5rem 0 0; padding: 0; list-style: none; font-family: var(--sans); font-weight: 500; font-size: 1rem; }
+
+/* Home hero */
+.hero { display: grid; grid-template-columns: 1.05fr 1fr; gap: 2.5rem; align-items: center; padding: 3rem 0 2rem; }
+figure { margin: 1.5rem 0; }
+figcaption { font-family: var(--sans); font-size: 0.85rem; color: var(--muted); line-height: 1.5; margin-top: 0.5rem; max-width: 38rem; }
+svg { width: 100%; height: auto; display: block; }
+.axis, .tick { stroke: var(--ink); stroke-width: 1.5; }
+.lbl { font-family: var(--sans); font-size: 12px; fill: var(--muted); }
+.curve { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.8s ease-out 0.3s forwards; }
+.curve.static { animation: none; stroke-dasharray: none; stroke-dashoffset: 0; }
+.ref { fill: none; stroke: var(--muted); stroke-width: 2; stroke-dasharray: 5 6; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) { .curve { animation: none; stroke-dashoffset: 0; } html { scroll-behavior: auto; } }
+
+/* Lists of work */
+.list { list-style: none; margin: 1rem 0 0; padding: 0; border-top: 1px solid var(--rule); }
+.list li { padding: 1.25rem 0; border-bottom: 1px solid var(--rule); }
+.list p { margin: 0.35rem 0 0; }
+.list .small { margin: 0.15rem 0 0; }
+
+/* Project pages */
+.meta { margin: 1.5rem 0 0; border-top: 1px solid var(--rule); max-width: 38rem; }
+.meta div { display: grid; grid-template-columns: 7rem 1fr; gap: 0 1rem; padding: 0.6rem 0; border-bottom: 1px solid var(--rule); }
+.meta dt { font-family: var(--sans); font-size: 0.9rem; color: var(--muted); padding-top: 0.15rem; }
+.meta dd { margin: 0; }
+.todo { border: 1.5px dashed var(--accent); border-radius: 2px; padding: 0.75rem 1rem; margin: 1rem 0; max-width: 38rem; font-family: var(--sans); font-size: 0.95rem; color: var(--muted); line-height: 1.5; }
+.todo strong { color: var(--ink); }
+.todo.fig { min-height: 12rem; display: flex; align-items: center; justify-content: center; text-align: center; }
+
+footer { margin-top: 4rem; border-top: 1px solid var(--rule); padding: 2rem 0 4rem; font-family: var(--sans); font-size: 0.95rem; color: var(--muted); }
+footer p { margin: 0 0 0.5rem; }
+
+@media (max-width: 760px) {
+  .hero { grid-template-columns: 1fr; padding-top: 1.5rem; }
+  .meta div { grid-template-columns: 1fr; }
+}
